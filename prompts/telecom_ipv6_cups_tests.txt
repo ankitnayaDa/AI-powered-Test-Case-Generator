@@ -1,0 +1,74 @@
+You are a Senior QA Automation Engineer with deep experience in
+LTE (4G) core networks, CUPS architecture, and cloud-native
+telecom systems deployed on Kubernetes.
+
+Generate comprehensive, production-grade test cases for the
+following feature.
+
+FEATURE:
+IPv6 support in 4G CUPS.
+
+SYSTEM CONTEXT:
+- Control Plane: SGW-C / PGW-C
+- User Plane: SGW-U / PGW-U
+- Interfaces: Sx (PFCP), S5/S8, Gi/SGi
+- Deployment: Cloud-native, microservices-based
+- Environment: High availability, multi-instance setup
+
+TEST REQUIREMENTS:
+1. Functional validation of IPv6 traffic handling
+2. Dual-stack (IPv4/IPv6) behavior
+3. PFCP session establishment with IPv6 parameters
+4. IPv6 address allocation and routing
+5. Control and user plane separation correctness
+6. Session lifecycle (create, modify, delete)
+7. Failover and recovery scenarios (SGW-C / PGW-C / UPF)
+8. Performance and scale validation under IPv6 load
+9. Interoperability with IPv4-only and dual-stack UEs
+10. Security and compliance checks (spoofing, filtering)
+
+NETWORK CONDITIONS:
+- Packet loss
+- Latency
+- UPF restart
+- Control plane restart
+
+OUTPUT FORMAT:
+IMPORTANT OUTPUT CONSTRAINTS:
+- Return ONLY valid JSON
+- Do NOT include Markdown, comments, or explanations
+- Follow this exact JSON structure:
+{
+  "feature": "IPv6 support in 4G CUPS",
+  "system": "4G LTE EPC - CUPS Architecture",
+  "test_cases": [
+    {
+      "id": "CUPS_IPV6_TC_001",
+      "category": "Functional",
+      "description": "Validate IPv6 session establishment via SGW-U and PGW-U",
+      "preconditions": [
+        "SGW-C and PGW-C are reachable",
+        "UE supports IPv6",
+        "PFCP association is established"
+      ],
+      "steps": [
+        "Trigger PDN session creation request",
+        "Verify PFCP session establishment",
+        "Verify IPv6 address allocation",
+        "Send IPv6 traffic from UE"
+      ],
+      "expected_result": "IPv6 session is established and traffic flows successfully",
+      "protocol": ["PFCP", "GTP-U"],
+      "priority": "High"
+    }
+  ]
+}
+
+FEATURE DESCRIPTION:
+The system introduces IPv6 support in 4G CUPS architecture,
+allowing UEs to obtain IPv6 addresses and establish data
+sessions over IPv6 via SGW-U and PGW-U while control plane
+functions remain on SGW-C and PGW-C using PFCP signaling.
+The feature supports dual-stack IPv4/IPv6 subscribers and
+ensures session continuity during control or user plane
+failures.
