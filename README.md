@@ -24,7 +24,7 @@ Additional files added
 Run the CLI
 
 ```powershell
-python run_tests.py gemini
+python geminiai_tests_generate.py
 ```
 
 Copy `.env.template` to `.env` first and populate the keys:
