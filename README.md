@@ -1,58 +1,143 @@
-# AI-powered Test Case Generator
+# AI-Powered Test Case Generator (Telecom QA)
+## Overview
 
-This repository contains a GenAI (Gemini) example to generate structured test cases from a prompt template for IPv6 CUPS (Control and User Plane Separation).
+This repository contains an AI-powered test case generation tool designed for telecom and cloud-native systems testing.
+It leverages Large Language Models (LLMs) to automatically generate telecom-grade test cases from feature descriptions, with a focus on 4G/5G core network use cases.
 
-**Included script:**
-- `geminiai_tests_generate.py`: Uses Google GenAI (Gemini) to generate testcases from the prompt and saves both a Markdown and JSON output to the `output/` folder. Expects `GEMINI_API_KEY` in the environment.
+The primary use case demonstrated in this project is IPv6 support in 4G CUPS (Control and User Plane Separation) architecture.
 
-**Prompt template:**
-- `prompts/telecom_ipv6_cups_tests.txt` — production-style prompt that requests only valid JSON with a specific schema for IPv6 support in 4G CUPS.
+## Problem Statement
 
-**Outputs:**
-- `output/ipv6_cups_testcases.md` — full Markdown response captured from the model.
-- `output/ipv6_cups_testcases.json` — parsed JSON extracted from the model response (if present).
+In large-scale telecom systems:
 
-Quick notes
-- The script is an example and assumes you have the appropriate Python packages installed and `GEMINI_API_KEY` available via a `.env` file or environment variable.
-- `geminiai_tests_generate.py` includes simple retry logic and extracts the JSON code block from the LLM response.
+* Test case design for complex features (e.g., CUPS, IPv6, PFCP flows) is time-consuming
+* Manual test creation is error-prone
+* Ensuring coverage for failover, scale, and protocol edge cases requires deep domain expertise
 
-Additional files added
-- `requirements.txt` — lists dependencies used by the example (`python-dotenv`, `google-genai`).
-- `.env.template` — copy this to `.env` and fill in `GEMINI_API_KEY` before running the script.
-- `run_tests.py` — a tiny CLI to run the Gemini example: `python run_tests.py gemini`.
+Traditional automation frameworks help with execution, but test design remains largely manual.
 
-Run the CLI
+## Solution
 
-```powershell
-python geminiai_tests_generate.py
+This project demonstrates how LLM-based AI can be applied to software testing problems by:
+
+* Using telecom-specific prompt engineering
+* Generating production-grade test cases
+* Returning output in structured JSON and Markdown
+* Making results automation-ready and reusable
+
+The generated test cases cover:
+
+* Functional scenarios
+* Negative and boundary conditions
+* Session lifecycle validation
+* Failover and recovery
+* Protocol-level behavior (PFCP, GTP-U)
+* IPv4 / IPv6 dual-stack behavior
+
+## Key Features
+
+* Telecom-aware test generation (4G CUPS, PFCP, IPv6)
+* LLM-driven AI test design
+* Structured JSON output for machine processing
+* Markdown output for human-readable documentation
+* Repeatable and automated generation via Python
+* Extensible for CI/CD and automation frameworks
+
+## Example Use Case
+
+### Feature: IPv6 support in 4G CUPS 
+**Architecture:**
+* SGW-C / PGW-C (Control Plane)
+* SGW-U / PGW-U (User Plane)
+* PFCP signaling
+* Dual-stack IPv4/IPv6 support
+
+The tool generates test cases that validate:
+
+* PFCP session establishment with IPv6 parameters
+* IPv6 address allocation
+* Traffic forwarding via user plane
+* Session modification and deletion
+* Control plane and user plane failover
+* Interoperability with IPv4-only subscribers
+
+## Repository Structure
+```
+AI-powered-Test-Case-Generator/
+├── prompts/
+│   └── telecom_ipv6_cups_tests.txt
+├── output/
+│   ├── ipv6_cups_ai_testcases.md
+│   └── ipv6_cups_ai_testcases.json
+├── generate_tests.py
+├── .env
+└── README.md
 ```
 
-Copy `.env.template` to `.env` first and populate the keys:
+## How It Works
 
-```powershell
-copy .env.template .env
-# then edit .env with your API keys
+1. A telecom-grade prompt defines:
+* System context
+* Protocols
+* Reliability and scale requirements
+
+2. The Python script:
+* Reads the prompt template
+* Injects feature description
+* Calls the LLM API
+
+3. The AI returns:
+* Structured JSON test cases
+* Human-readable Markdown documentation
+4. Outputs are saved for:
+* Review
+* Automation conversion
+* CI/CD integration
+
+## Prerequisites
+
+* Python 3.9+
+* An LLM API key (OpenAI / Gemini)
+* Basic knowledge of telecom core networks (recommended)
+
+## Setup & Usage
+1. Clone the repository
+```
+git clone https://github.com/ankitnayaDa/AI-powered-Test-Case-Generator.git
+cd AI-powered-Test-Case-Generator
+```
+2. Create virtual environment
+```
+python -m venv venv
+source venv/bin/activate
+```
+3. Install dependencies
+```
+pip install -r requirements.txt
+```
+4. Configure API key
+Create a .env file:
+```
+OPENAI_API_KEY=your_api_key_here
 ```
 
-Getting started
-1. Create and activate a virtual environment (recommended):
+5. Run test case generation
+```
+python generate_tests.py
+```
 
-	```powershell
-	python -m venv .venv
-	.\\.venv\\Scripts\\Activate.ps1
-	pip install -r requirements.txt  # if you create one; otherwise install needed libs
-	```
+Generated test cases will be available in the ```output/``` directory.
 
-2. Add API keys to a `.env` file or export them in your environment:
+## Extensibility
+This project is intentionally designed to be extensible:
+* JSON → Robot Framework test generation
+* JSON → pytest automation
+* Integration with Jenkins / GitHub Actions
+* Test prioritization or flaky test detection using ML
+* Support for additional telecom features (5G SA, UPF, IMS)
 
-	- `GEMINI_API_KEY` — for `geminiai_tests_generate.py`
+## Author
 
-3. Run the Gemini example:
-
-	```powershell
-	python geminiai_tests_generate.py
-	```
-
-Where to look for results
-- See the `output/` folder for generated testcases (Markdown and JSON).
-- The prompt template is in `prompts/telecom_ipv6_cups_tests.txt` — edit it to change the output structure or feature description.
+Ankit Kumar Nayak
+Senior QA Automation Engineer
+Telecom | Cloud-Native Systems | AI-Assisted Testing
