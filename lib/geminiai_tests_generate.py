@@ -24,10 +24,10 @@ def AI_generate_test_cases():
     response_text = None
     for attempt in range(3):
         try:
-            print(client.models.count_tokens(model=MODEL_NAME, contents=[prompt]))
+            #print(client.models.count_tokens(model=MODEL_NAME, contents=[prompt]))
             response = client.models.generate_content(model=MODEL_NAME, contents=prompt)
             response_text = response.text
-            print(response.usage_metadata)
+            #print(response.usage_metadata)
             Save_test_Cases(response_text)
             break
         except errors.ClientError as e:
