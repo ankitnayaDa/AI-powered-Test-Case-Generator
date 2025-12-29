@@ -65,12 +65,20 @@ The tool generates test cases that validate:
 ```
 AI-powered-Test-Case-Generator/
 ├── prompts/
-│   └── telecom_ipv6_cups_tests.txt
 ├── output/
+│   ├── ipv6_cups_ai_testcases.json
 │   ├── ipv6_cups_ai_testcases.md
-│   └── ipv6_cups_ai_testcases.json
+│   └── ipv6_cups_tests.robot
+├── resources/
+│   ├── telecom_keywords.resource
+│   ├── telecom_variables.resource
+│   └── telecom_settings.resource
 ├── generate_tests.py
-├── .env
+├── json_to_robot.py
+├── json_to_robot_keywords.py
+├── json_to_robot_resources.py
+├── run_pipeline.py
+├── Makefile
 └── README.md
 ```
 
@@ -123,7 +131,7 @@ OPENAI_API_KEY=your_api_key_here
 
 5. Run test case generation
 ```
-python generate_tests.py
+python run_pipeline.py
 ```
 
 Generated test cases will be available in the ```output/``` directory.
@@ -135,6 +143,50 @@ This project is intentionally designed to be extensible:
 * Integration with Jenkins / GitHub Actions
 * Test prioritization or flaky test detection using ML
 * Support for additional telecom features (5G SA, UPF, IMS)
+
+## Robot Framework Test Generation
+In addition to generating structured test cases in JSON and Markdown, this project can be extended to automatically generate Robot Framework test scripts from the AI-generated JSON output.
+
+This enables a fully automated flow:
+```Feature description → AI-generated test cases → Robot Framework automation```
+
+## Generation Flow
+* AI generates structured JSON test cases
+* A conversion script parses the JSON
+* Robot Framework .robot files are generated automatically
+* Generated tests are ready to run in CI/CD pipelines
+
+## Example JSON Input
+```
+{
+  "id": "CUPS_IPV6_TC_001",
+  "description": "Validate IPv6 session establishment via SGW-U",
+  "steps": [
+    "Trigger PDN session creation",
+    "Verify PFCP session establishment",
+    "Verify IPv6 address allocation",
+    "Send IPv6 traffic from UE"
+  ],
+  "expected_result": "IPv6 session is established and traffic flows successfully",
+  "protocol": ["PFCP", "GTP-U"]
+}
+```
+## Example Generated Robot Framework Test
+```
+*** Test Cases ***
+CUPS_IPV6_TC_001 - Validate IPv6 session establishment
+    [Documentation]    Validate IPv6 session establishment via SGW-U
+    [Tags]    IPv6    CUPS    PFCP
+
+    Trigger PDN Session Creation
+    Verify PFCP Session Established
+    Verify IPv6 Address Allocation
+    Send IPv6 Traffic From UE
+
+    Verify IPv6 Traffic Is Successful
+```
+**Note**: Keywords such as Trigger PDN Session Creation and
+Verify PFCP Session Established are expected to be implemented using existing telecom test libraries or custom keywords.
 
 ## Author
 
